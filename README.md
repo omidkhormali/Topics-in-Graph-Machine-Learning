@@ -1,1 +1,1 @@
-# Topics-in-Graph-Machine-Learning
+# Topics in Graph Machine Learning
