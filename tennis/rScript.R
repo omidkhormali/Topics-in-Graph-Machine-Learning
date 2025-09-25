@@ -1,7 +1,7 @@
 install.packages("tidyverse")
 library("tidyverse")
 
-data = read_csv("atp_tennis.csv")
+data = read_csv("tennis_data/atp_tennis.csv")
 
 # Separates the Date into Year, Month, and Day
 data = separate_wider_delim(data, Date, "-", names=c('Year', 'Month', 'Day'))
@@ -21,4 +21,8 @@ data$Series = str_replace(data$Series, 'Masters', 'Masters 1000')
 data$Series = str_replace(data$Series, 'Masters 1000 1000', 'Masters 1000')
 data$Series = str_replace(data$Series, 'Masters 1000 Cup', 'ATP Finals')
 
-write_csv(as.data.frame(data), file="updated_atp.csv")
+write_csv(as.data.frame(data), file="tennis_data/updated_atp.csv")
+
+# For testing purposes
+testData = filter(data, Year <= 2002)
+write_csv(as.data.frame(testData), file="tennis_data/test_data_atp.csv")
