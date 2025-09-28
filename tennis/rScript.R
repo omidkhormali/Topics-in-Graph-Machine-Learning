@@ -10,7 +10,7 @@ data = separate_wider_delim(data, Date, "-", names=c('Year', 'Month', 'Day'))
 # two columns- one for each player
 data = separate_wider_delim(data, Score, " ", names=c('1', '2', '3', '4', '5'), too_few="align_start")
 data = pivot_longer(data, cols=19:23, names_to="Set", values_to="Score", values_drop_na=T)
-data = separate_wider_delim(data, Score, "-", names=c('Score_W', 'Score_L'))
+data = separate_wider_delim(data, Score, "-", names=c('Score_1', 'Score_2'))
 
 # The Series names changed in 2009, so the following code changes
 # old series names into their modern counterpart without breaking
