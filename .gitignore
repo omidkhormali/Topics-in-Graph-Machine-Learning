@@ -3,6 +3,8 @@ tennis/.Rhistory
 tennis/.RData
 tennis/.Ruserdata
 tennis/data/test_data_atp.csv
+tennis/data/atp_no_spaces.csv
+tennis/data/updated_atp.csv
 tennis/data/matchWL.csv
 .Rproj.user
 .venv
