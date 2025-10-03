@@ -3,12 +3,16 @@ library("tidyverse")
 
 data = read_csv("data/atp_tennis.csv")
 # letters = c('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z')
-data$Player_1 = str_replace(data$Player_1, " ", '_')
-data$Player_2 = str_replace(data$Player_2, " ", '_')
-data$Winner = str_replace(data$Winner, "  ", '_')
 
 # Separates the Date into Year, Month, and Day
 data = separate_wider_delim(data, Date, "-", names=c('Year', 'Month', 'Day'))
+data$Player_1 = str_replace(data$Player_1, " ", '_')
+data$Player_2 = str_replace(data$Player_2, " ", '_')
+data$Winner = str_replace(data$Winner, " ", '_')
+data = sort_by(data, data$Year)
+
+# For Match Info
+write_csv(as.data.frame(data), file="data/atp_no_spaces.csv")
 
 # Makes each set it's own observation and separates the game score into
 # two columns- one for each player
@@ -24,8 +28,6 @@ data$Series = str_replace(data$Series, 'International', 'ATP250')
 data$Series = str_replace(data$Series, 'Masters', 'Masters 1000')
 data$Series = str_replace(data$Series, 'Masters 1000 1000', 'Masters 1000')
 data$Series = str_replace(data$Series, 'Masters 1000 Cup', 'ATP Finals')
-
-write_csv(as.data.frame(data), file="data/atp_no_spaces.csv")
 
 # For testing purposes
 testData = filter(data, Year <= 2002)

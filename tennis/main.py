@@ -4,46 +4,108 @@ import numpy as np
 
 directory = os.path.dirname(os.path.abspath(__file__))
 players = np.array([['Player', 'Wins', 'Matches']])
-count = 1
 with open(directory + '/data/atp_no_spaces.csv', newline='') as csvfile:
     data = csv.reader(csvfile, delimiter=",")
     next(data)
     for row in data:
-        if row[7] in players[:]:
-            index = np.where(players == row[7])[0]
+        if row[9] in players[:]:
+            index = np.where(players == row[9])[0]
             thing = players[index]
             value = int(thing[0, 2])
             thing[0, 2] = value+1
             players[index] = thing
-            if row[7] == row[9] in players[:]:
-                index = np.where(players == row[7])[0]
-                thing = players[index]
+            if row[9] == row[11] in players[:]:
                 value = int(thing[0, 1])
                 thing[0, 1] = value+1
                 players[index] = thing
         else:
-            if row[7] == row[9] in players[:]:
-                players = np.vstack([players, [row[7], 1, 1]])
+            if row[9] == row[11]:
+                players = np.vstack([players, [row[9], 1, 1]])
             else:
-                players = np.vstack([players, [row[7], 0, 1]])
-        if row[8] in players[:]:
-            index = np.where(players == row[8])[0]
+                players = np.vstack([players, [row[9], 0, 1]])
+        if row[10] in players[:]:
+            index = np.where(players == row[10])[0]
             thing = players[index]
             value = int(thing[0, 2])
             thing[0, 2] = value+1
             players[index] = thing
-            if row[8] == row[9] in players[:]:
-                index = np.where(players == row[8])[0]
-                thing = players[index]
+            if row[10] == row[11]:
                 value = int(thing[0, 1])
                 thing[0, 1] = value+1
                 players[index] = thing
         else:
-            if row[8] == row[9] in players[:]:
-                players = np.vstack([players, [row[8], 1, 1]])
+            if row[10] == row[11]:
+                players = np.vstack([players, [row[10], 1, 1]])
             else:
-                players = np.vstack([players, [row[8], 0, 1]])
+                players = np.vstack([players, [row[10], 0, 1]])
+
+print("Writing to the CSV...")
 with open(directory + "/data/matchWL.csv", 'w', newline='') as csvfile:
     newcsv = csv.writer(csvfile, delimiter=',')
     for row in players:
+        if row[0] == "Player":
+            ratio = "W/L Ratio"
+        else:
+            ratio = float(row[1])/float(row[2])
+        row = np.append(row, ratio)
         newcsv.writerow(row)
+print("Part 1 done!\n")
+
+# FOR EACH YEAR
+
+finalYr = np.empty((0, 4))
+playersYr = np.array([['Year', 'Player', 'Wins', 'Matches']])
+year = 1999
+with open(directory + '/data/atp_no_spaces.csv', newline='') as csvfile:
+    data = csv.reader(csvfile, delimiter=",")
+    next(data)
+    for row in data:
+        if str(row[1]) != str(year):
+            if int(row[1]) > year:
+                year = year + 1
+            else:
+                year = year - 1
+            finalYr = np.vstack([finalYr, playersYr])
+            playersYr = np.empty((0, 4))
+        if row[9] in playersYr[:]:
+            index = np.where(playersYr == row[9])[0]
+            thing = playersYr[index]
+            value = int(thing[0, 3])
+            thing[0, 3] = value+1
+            playersYr[index] = thing
+            if row[9] == row[11]:
+                value = int(thing[0, 2])
+                thing[0, 2] = value+1
+                playersYr[index] = thing
+        else:
+            if row[9] == row[11]:
+                playersYr = np.vstack([playersYr, [year, row[9], 1, 1]])
+            else:
+                playersYr = np.vstack([playersYr, [year, row[9], 0, 1]])
+        if row[10] in playersYr[:]:
+            index = np.where(playersYr == row[10])[0]
+            thing = playersYr[index]
+            value = int(thing[0, 3])
+            thing[0, 3] = value+1
+            playersYr[index] = thing
+            if row[10] == row[11]:
+                value = int(thing[0, 2])
+                thing[0, 2] = value+1
+                playersYr[index] = thing
+        else:
+            if row[10] == row[11]:
+                playersYr = np.vstack([playersYr, [year, row[10], 1, 1]])
+            else:
+                playersYr = np.vstack([playersYr, [year, row[10], 0, 1]])
+    finalYr = np.vstack([finalYr, playersYr])
+print("Writing to CSV...")
+with open(directory + "/data/matchWLYear.csv", 'w', newline='') as csvfile:
+    newcsv = csv.writer(csvfile, delimiter=',')
+    for row in finalYr:
+        if row[0] == "Year":
+            ratio = "W/L Ratio"
+        else:
+            ratio = float(row[2])/float(row[3])
+        row = np.append(row, ratio)
+        newcsv.writerow(row)
+print("Part 2 done!")
