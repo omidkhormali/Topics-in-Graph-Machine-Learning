@@ -9,10 +9,13 @@ data = separate_wider_delim(data, Date, "-", names=c('Year', 'Month', 'Day'))
 data$Player_1 = str_replace(data$Player_1, " ", '_')
 data$Player_2 = str_replace(data$Player_2, " ", '_')
 data$Winner = str_replace(data$Winner, " ", '_')
+data$Player_1 = str_replace(data$Player_1, "_", ' ')
+data$Player_2 = str_replace(data$Player_2, "_", ' ')
+data$Winner = str_replace(data$Winner, "_", ' ')
 data = sort_by(data, data$Year)
 
 # For Match Info
-write_csv(as.data.frame(data), file="data/atp_no_spaces.csv")
+write_csv(as.data.frame(data), file="data/atp_fixed.csv")
 
 # Makes each set it's own observation and separates the game score into
 # two columns- one for each player

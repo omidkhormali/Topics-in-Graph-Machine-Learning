@@ -4,7 +4,7 @@ import numpy as np
 
 directory = os.path.dirname(os.path.abspath(__file__))
 players = np.array([['Player', 'Wins', 'Matches']])
-with open(directory + '/data/atp_no_spaces.csv', newline='') as csvfile:
+with open(directory + '/data/atp_fixed.csv', newline='') as csvfile:
     data = csv.reader(csvfile, delimiter=",")
     next(data)
     for row in data:
@@ -56,7 +56,7 @@ print("Part 1 done!\n")
 finalYr = np.empty((0, 4))
 playersYr = np.array([['Year', 'Player', 'Wins', 'Matches']])
 year = 1999
-with open(directory + '/data/atp_no_spaces.csv', newline='') as csvfile:
+with open(directory + '/data/atp_fixed.csv', newline='') as csvfile:
     data = csv.reader(csvfile, delimiter=",")
     next(data)
     for row in data:
@@ -102,10 +102,35 @@ print("Writing to CSV...")
 with open(directory + "/data/matchWLYear.csv", 'w', newline='') as csvfile:
     newcsv = csv.writer(csvfile, delimiter=',')
     for row in finalYr:
-        if row[0] == "Year":
-            ratio = "W/L Ratio"
-        else:
-            ratio = float(row[2])/float(row[3])
-        row = np.append(row, ratio)
         newcsv.writerow(row)
-print("Part 2 done!")
+print("Part 2 done!\n")
+
+data = np.empty((0, 6))
+for row in finalYr:
+    index = np.where(players == row[1])[0]
+    thing = players[index]
+    if str(thing[0, 1]) == "Wins":    
+        value1 = "T Wins"
+        value2 = "T Sets"
+    else:
+        value1 = int(thing[0, 1])
+        value2 = int(thing[0, 2])
+    data = np.vstack([data, [row[0], row[1], row[2], row[3], value1, value2]])
+dataSet = np.empty((0, 9))
+with open(directory + "/data/tvalue.csv", 'w', newline='') as csvfile:
+    newcsv = csv.writer(csvfile, delimiter=',')
+    for row in data:
+        if row[0] == "Year":
+            rate = "Wins Rate"
+            matches = "Matches Rate"
+            t = "t Value"
+        else:
+            if int(row[4]) == 0:
+                rate = 0
+            else:
+                rate = float(row[2])/float(row[4])
+            matches = float(row[3])/float(row[5])
+            t = rate * matches
+        dataSet = np.array([row[0], row[1], row[2], row[3], row[4], row[5], rate, matches, t])
+        newcsv.writerow(dataSet)
+print("Part 3 done!")
