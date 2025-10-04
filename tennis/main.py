@@ -116,7 +116,7 @@ for row in finalYr:
         value1 = int(thing[0, 1])
         value2 = int(thing[0, 2])
     data = np.vstack([data, [row[0], row[1], row[2], row[3], value1, value2]])
-dataSet = np.empty((0, 9))
+dataGet = np.empty((0, 9))
 with open(directory + "/data/tvalue.csv", 'w', newline='') as csvfile:
     newcsv = csv.writer(csvfile, delimiter=',')
     for row in data:
@@ -132,5 +132,30 @@ with open(directory + "/data/tvalue.csv", 'w', newline='') as csvfile:
             matches = float(row[3])/float(row[5])
             t = rate * matches
         dataSet = np.array([row[0], row[1], row[2], row[3], row[4], row[5], rate, matches, t])
+        dataGet = np.vstack([dataGet, dataSet])
         newcsv.writerow(dataSet)
-print("Part 3 done!")
+print("Part 3 done!\n")
+
+data = np.empty((0, 6))
+for row in dataGet:
+    if row[0] == "Year":
+        data = np.vstack([data, [row[1], row[0], row[8], "Win Rate", "Weight", "g(v)"]])
+    else:
+        if row[1] in data[:]: 
+            index = np.where(data == row[1])[0]
+            thing = data[index]
+            value = float(thing[0, 2])
+            if(value < float(row[8])):
+                weight = (float(1)/(1+np.exp(0.5*(19-(int(row[0])-2000)))))/(float(1)/(1+np.exp(0.5*(19-25))))
+                g = rate*weight
+                data[index] = [row[1], row[0], row[8], rate, weight, g]
+        else:
+            rate = float(row[4])/float(row[5])
+            weight = (float(1)/(1+np.exp(0.5*(2019-int(row[0])))))/(float(1)/(1+np.exp(0.5*(-6))))
+            g = rate*weight
+            data = np.vstack([data, [row[1], row[0], row[8], rate, weight, g]])
+with open(directory + "/data/g-function.csv", 'w', newline='') as csvfile:
+    newcsv = csv.writer(csvfile, delimiter=',')
+    for row in data:
+        newcsv.writerow(row)
+print("Part 4 done!\n")
